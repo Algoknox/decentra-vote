@@ -1,5 +1,5 @@
 # decentra-vote
-Decentra vote is a decentralized and permissionless smart contract for conducting voting polls.
+Decentra vote is a decentralized and permissionless smart contract for conducting voting polls, featuring voting, retraction of votes and multiple dynamic options.
 
 ***DISCLAIMER:*** The source code in this tutorial isn't audited. Usage is purely at the risk of the user of the resulting smart contract code (TEAL).
 
@@ -43,7 +43,16 @@ The opt-in transaction would be an Application OptIn transaction, which would pr
 
 ### Application Call (voting) NoOp
 
-To conduct a vote, an application call is to be made with two positional arguments thus:
+To conduct a vote, a NoOp application call can be made with two positional arguments thus:
 
 - vote (byteslice)
-- choice (uint64) - To represent the position of the option in the 
+
+- choice (uint64) - To represent the position of the option in the 1-indexed list of options. Using the example above, the position for "lion" would be indexed at 2.
+
+### Application Call (voting) NoOp
+
+To conduct a vote, a NoOp application call can be made with two positional arguments thus:
+
+- vote (byteslice)
+
+- choice (uint64) - To represent the position of the option in the 1-indexed list of options. Using the example above, the position for "lion" would be indexed at 2.

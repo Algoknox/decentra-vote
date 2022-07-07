@@ -30,7 +30,7 @@ def approval_program():
                 App.globalPut(Bytes("poll_end_time"), poll_end_time), # write poll end time to global state
 
                 For (index.store(Int(3)), index.load() < Txn.application_args.length(), index.store(index.load() + Int(1))).Do(
-                    App.globalPut(Concat(Bytes("option-"), Itob(index.load() - 2)), Txn.application_args[index.load()]) # store options in state
+                    App.globalPut(Concat(Bytes("option-"), Itob(index.load() - Int(2))), Txn.application_args[index.load()]) # store options in state
                 ),
 
                 Approve()
@@ -69,18 +69,18 @@ def approval_program():
     )
 
     get_votes_count = ScratchVar(TealType.uint64)
-    choice = App.localGet(Txn.sender(), Bytes("choice")) # get user choice
+    user_choice = App.localGet(Txn.sender(), Bytes("choice")) # get user choice
 
     on_retract = Seq(
-        get_votes_count.store(App.globalGet(Concat(Bytes("option-"), choice, Bytes("-votes")))), # store value of votes for choice
+        get_votes_count.store(App.globalGet(Concat(Bytes("option-"), user_choice, Bytes("-votes")))), # store value of votes for choice
         If (
             And(
-                choice != Int(0), # make sure choice isn't empty
+                user_choice != Int(0), # make sure choice isn't empty
                 get_votes_count.load() >= Int(1) # ensure there is at least one vote
             )
         ).Then(
             Seq(
-                App.globalPut(App.globalGet(Concat(Bytes("option-"), choice, Bytes("-votes"))), get_votes_count.load() - Int(1)), # remove user vote
+                App.globalPut(App.globalGet(Concat(Bytes("option-"), user_choice, Bytes("-votes"))), get_votes_count.load() - Int(1)), # remove user vote
                 App.localDel(Txn.sender(), Bytes("choice")) # remove state for choice
             )
         ),
