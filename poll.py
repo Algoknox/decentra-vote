@@ -30,7 +30,7 @@ def approval_program():
                 App.globalPut(Bytes("poll_end_time"), poll_end_time), # write poll end time to global state
 
                 For (index.store(Int(3)), index.load() < Txn.application_args.length(), index.store(index.load() + Int(1))).Do(
-                    App.globalPut(Concat(Bytes("option-"), Itob(index.load())), Txn.application_args[index.load()]) # store options in state
+                    App.globalPut(Concat(Bytes("option-"), Itob(index.load() - 2)), Txn.application_args[index.load()]) # store options in state
                 ),
 
                 Approve()
