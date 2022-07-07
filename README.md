@@ -56,3 +56,18 @@ To conduct a vote, a NoOp application call can be made with two positional argum
 - vote (byteslice)
 
 - choice (uint64) - To represent the position of the option in the 1-indexed list of options. Using the example above, the position for "lion" would be indexed at 2.
+
+### Application Call (Retracting vote) NoOp
+
+To retract a vote (allow for a new choice), a NoOp application call can be made with one positional argument thus:
+
+- retract (byteslice)
+
+The above implementation would allow for smooth operation of the poll smart contracts.
+
+## Final Notes
+
+Note that the smart contract (Application) creator address cannot conduct a vote.
+To learn more about PyTEAL, visit https://pyteal.readthedocs.io/en/stable/.
+
+We hope you find this tutorial helpful. All your PRs are encouraged. Feel free to ask questions or send a DM to @Algoknox.
