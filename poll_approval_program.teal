@@ -1,0 +1,194 @@
+#pragma version 5
+txn ApplicationID
+int 0
+==
+bnz main_l16
+txn OnCompletion
+int OptIn
+==
+txn OnCompletion
+int NoOp
+==
+||
+bnz main_l5
+txn OnCompletion
+int CloseOut
+==
+txn OnCompletion
+int UpdateApplication
+==
+||
+txn OnCompletion
+int DeleteApplication
+==
+||
+bnz main_l4
+err
+main_l4:
+int 0
+return
+main_l5:
+txna ApplicationArgs 0
+byte "optin"
+==
+bnz main_l15
+txna ApplicationArgs 0
+byte "vote"
+==
+bnz main_l12
+txna ApplicationArgs 0
+byte "retract"
+==
+bnz main_l9
+err
+main_l9:
+byte "option-"
+txn Sender
+byte "choice"
+app_local_get
+concat
+byte "-votes"
+concat
+app_global_get
+store 2
+txn Sender
+byte "choice"
+app_local_get
+int 0
+!=
+load 2
+int 1
+>=
+&&
+bnz main_l11
+main_l10:
+int 1
+return
+main_l11:
+byte "option-"
+txn Sender
+byte "choice"
+app_local_get
+concat
+byte "-votes"
+concat
+app_global_get
+load 2
+int 1
+-
+app_global_put
+txn Sender
+byte "choice"
+app_local_del
+b main_l10
+main_l12:
+txn Sender
+global CreatorAddress
+!=
+txn Sender
+byte "voted"
+app_local_get
+int 0
+==
+&&
+global LatestTimestamp
+byte "poll_start_time"
+app_global_get
+>=
+&&
+global LatestTimestamp
+byte "poll_end_time"
+app_global_get
+<=
+&&
+byte "option-"
+txna ApplicationArgs 1
+concat
+app_global_get
+int 0
+!=
+&&
+bnz main_l14
+int 0
+return
+main_l14:
+byte "option-"
+txna ApplicationArgs 1
+concat
+byte "-votes"
+concat
+app_global_get
+int 1
++
+store 1
+txn Sender
+byte "choice"
+txna ApplicationArgs 1
+app_local_put
+byte "option-"
+txna ApplicationArgs 1
+concat
+byte "-votes"
+concat
+load 1
+app_global_put
+int 1
+return
+main_l15:
+int 1
+return
+main_l16:
+txn NumAppArgs
+int 34
+<=
+txna ApplicationArgs 1
+btoi
+global LatestTimestamp
+>
+&&
+txna ApplicationArgs 2
+btoi
+txna ApplicationArgs 1
+btoi
+>
+&&
+bnz main_l18
+int 0
+return
+main_l18:
+byte "creator"
+txn Sender
+app_global_put
+byte "poll_title"
+txna ApplicationArgs 0
+app_global_put
+byte "poll_start_time"
+txna ApplicationArgs 1
+btoi
+app_global_put
+byte "poll_end_time"
+txna ApplicationArgs 2
+btoi
+app_global_put
+int 3
+store 0
+main_l19:
+load 0
+txn NumAppArgs
+<
+bnz main_l21
+int 1
+return
+main_l21:
+byte "option-"
+load 0
+itob
+concat
+load 0
+txnas ApplicationArgs
+app_global_put
+load 0
+int 1
++
+store 0
+b main_l19

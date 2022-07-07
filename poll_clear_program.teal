@@ -1,0 +1,38 @@
+#pragma version 5
+byte "option-"
+txn Sender
+byte "choice"
+app_local_get
+concat
+byte "-votes"
+concat
+app_global_get
+store 0
+txn Sender
+byte "choice"
+app_local_get
+int 0
+!=
+load 0
+int 1
+>=
+&&
+bz main_l2
+byte "option-"
+txn Sender
+byte "choice"
+app_local_get
+concat
+byte "-votes"
+concat
+app_global_get
+load 0
+int 1
+-
+app_global_put
+txn Sender
+byte "choice"
+app_local_del
+main_l2:
+int 1
+return
