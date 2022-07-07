@@ -9,6 +9,7 @@ def approval_program():
     
     on_optin = Seq(
         Approve() # approve opt in call
+    )
 
     poll_title = Txn.application_args[0] # to store the poll title
     poll_start_time = Btoi(Txn.application_args[1]) # to store the start timestamp of the poll
