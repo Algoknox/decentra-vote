@@ -5,7 +5,8 @@ def approval_program():
     #numglobaluints: 32
     #numglobalbyteslices: 32
 
-    #numlocaluints: 1
+    #numlocaluints: 0
+    #numlocalbtyeslices: 1
     
     on_optin = Seq(
         Approve() # approve opt in call
