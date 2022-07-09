@@ -101,7 +101,7 @@ def approval_program():
         [
             Or(
                 Txn.on_completion() == OnComplete.OptIn,
-                Txn.on_completion() == OnComplete().NoOp
+                Txn.on_completion() == OnComplete.NoOp
             ),
             on_call
         ],
